@@ -1,0 +1,179 @@
+/* frontend-sakrileg/src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Estilos de Badges para Tablas --- */
+.table-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem; /* Relleno (padding) */
+    border-radius: 9999px;   /* Totalmente redondeado */
+    font-weight: 600;        /* Texto en semibold */
+    font-size: 0.875rem;     /* Texto un poco más pequeño */
+    text-transform: capitalize; /* Opcional: Pone la primera letra en mayúscula */
+}
+
+/* --- TIPO --- */
+.tipo-ingreso {
+    background-color: #c6f6d5; /* Verde claro */
+    color: #2f855a;            /* Verde oscuro */
+}
+.tipo-salida {
+    background-color: #fed7d7; /* Rojo claro */
+    color: #c53030;            /* Rojo oscuro */
+}
+
+/* --- ESTADO --- */
+.estado-activo {
+    background-color: #c6f6d5; /* Verde claro */
+    color: #2f855a;            /* Verde oscuro */
+}
+.estado-anulado {
+    background-color: #e2e8f0; /* Gris claro */
+    color: #4a5568;            /* Gris oscuro */
+}
+
+/* --- MOTIVO --- */
+.motivo-compra {
+    background-color: #e9d8fd; /* Púrpura claro */
+    color: #805ad5;            /* Púrpura oscuro */
+}
+.motivo-venta {
+    background-color: #feebc8; /* Naranja claro */
+    color: #dd6b20;            /* Naranja oscuro */
+}
+.motivo-devolucion {
+    background-color: #fefcbf; /* Amarillo claro */
+    color: #b7791f;            /* Amarillo oscuro */
+}
+.motivo-reposicion {
+    background-color: #e2e8f0; /* Gris claro */
+    color: #4a5568;            /* Gris oscuro */
+}
+
+/* --- Estilos de Badges para Tablas --- */
+.table-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem; 
+    border-radius: 9999px;   
+    font-weight: 600;        
+    font-size: 0.875rem;     
+    text-transform: capitalize; 
+}
+/* ... (tus clases de tipo, estado, motivo van aquí) ... */
+
+
+/* --- ¡NUEVO! ROLES DE USUARIO --- */
+.rol-admin {
+    background-color: #e9d8fd; /* Púrpura claro */
+    color: #805ad5;            /* Púrpura oscuro */
+}
+.rol-jefe {
+    background-color: #bee3f8; /* Azul claro */
+    color: #3182ce;            /* Azul oscuro */
+}
+.rol-operador {
+    background-color: #f6e8c6; /* Verde claro */
+    color: #85772f;            /* Verde oscuro */
+}
+.rol-default {
+    background-color: #e2e8f0; /* Gris claro */
+    color: #4a5568;            /* Gris oscuro */
+}
+
+/* --- ESTADO DE STOCK (Inventario) --- */
+.estado-stock-ok {
+    background-color: #c6f6d5; /* Verde claro */
+    color: #2f855a;            /* Verde oscuro */
+    text-transform: uppercase;
+}
+.estado-stock-low {
+    background-color: #fed7d7; /* Rojo claro */
+    color: #c53030;            /* Rojo oscuro */
+    text-transform: capitalize;
+}
+
+/* --- ESTADO DE TRACKING --- */
+.tracking-transito {
+    background-color: #bee3f8; /* Azul claro */
+    color: #3182ce;            /* Azul oscuro */
+}
+.tracking-entregado {
+    background-color: #c6f6d5; /* Verde claro */
+    color: #2f855a;            /* Verde oscuro */
+}
+.tracking-pendiente {
+    background-color: #fefcbf; /* Amarillo claro */
+    color: #b7791f;            /* Amarillo oscuro */
+}
+
+/* --- ¡NUEVO! ESTILOS PARA SUB-PESTAÑAS (TABS) --- */
+.subtab-nav {
+    display: flex;
+    gap: 0.5rem; /* 8px */
+    border-bottom: 2px solid #e2e8f0; /* Borde gris */
+    margin-bottom: 1.5rem; /* 24px */
+}
+
+.subtab-item {
+    padding: 0.75rem 1.25rem; /* 12px 20px */
+    font-weight: 600;
+    color: #4a5568; /* Color de texto gris */
+    cursor: pointer;
+    border-bottom: 4px solid transparent; /* Borde inferior invisible */
+    margin-bottom: -2px; /* Alinea el borde con el borde del nav */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Estado Hover: fondo verde claro */
+.subtab-item:hover {
+    background-color: #f0fff4; /* Verde muy claro */
+    color: #2f855a; /* Verde oscuro */
+}
+
+/* Estado Activo: borde verde */
+.subtab-item.active {
+    color: #2f855a; /* Verde oscuro */
+    border-color: #38a169; /* Borde verde */
+}
+
+/* --- ¡NUEVO! ESTILOS PARA COLORES DE PRODUCTO --- */
+.color-rojo {
+    background-color: #fed7d7; /* Rojo claro */
+    color: #c53030;            /* Rojo oscuro */
+}
+.color-azul {
+    background-color: #bee3f8; /* Azul claro */
+    color: #3182ce;            /* Azul oscuro */
+}
+.color-verde {
+    background-color: #c6f6d5; /* Verde claro */
+    color: #2f855a;            /* Verde oscuro */
+}
+.color-negro {
+    background-color: #4a5568; /* Gris oscuro */
+    color: #ffffff;            /* Blanco */
+}
+.color-blanco {
+    background-color: #ffffff; /* Blanco */
+    color: #2d3748;            /* Gris muy oscuro */
+    border: 1px solid #e2e8f0; /* Borde gris claro */
+}
+.color-default {
+    background-color: #e2e8f0; /* Gris claro */
+    color: #4a5568;            /* Gris oscuro */
+}
+
+/* --- ¡NUEVO! ESTILOS PARA TRACKING DE ENTREGAS --- */
+.tracking-transito {
+    background-color: #bee3f8; /* Azul claro */
+    color: #3182ce;            /* Azul oscuro */
+}
+.tracking-entregado {
+    background-color: #c6f6d5; /* Verde claro */
+    color: #2f855a;            /* Verde oscuro */
+}
+.tracking-pendiente {
+    background-color: #fefcbf; /* Amarillo claro */
+    color: #b7791f;            /* Amarillo oscuro */
+}
