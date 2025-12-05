@@ -1,5 +1,6 @@
 // frontend/src/modules/Catalog/views/ProductoFormModal.jsx
 import React, { useState, useEffect } from 'react';
+import { useNotification } from '../../../context/NotificationContext';
 import productoApi from '../../../api/productoApi';
 
 // --- Constantes para los Dropdowns ---
@@ -20,6 +21,7 @@ const disabledInputStyles = "form-input w-full bg-gray-200 border border-gray-30
 
 const ProductoFormModal = ({ item, onClose, onSave }) => {
     
+    const { addNotification } = useNotification(); // <-- Usar Hook
     const mode = item ? 'editar' : 'crear';
     const title = mode === 'crear' ? 'Crear Nuevo Producto' : 'EDITAR producto';
 
@@ -78,11 +80,14 @@ const ProductoFormModal = ({ item, onClose, onSave }) => {
         try {
             if (mode === 'crear') {
                 await productoApi.createProducto(dataParaApi);
+                addNotification(`Producto creado: ${formData.nombre}`, 'SUCCESS');
             } else {
                 await productoApi.updateProducto(item.id, dataParaApi);
+                addNotification(`Producto actualizado: ${formData.nombre}`, 'INFO');
             }
             onSave();
         } catch (err) {
+            addNotification(`Error al guardar: ${err.message}`, 'ALERT'); // También para errores
             console.error("Error al guardar producto:", err);
             setError(err.message || "Error al guardar. Verifique los datos.");
         } finally {

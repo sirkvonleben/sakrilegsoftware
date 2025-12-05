@@ -10,7 +10,7 @@ const UserProfileDrawer = ({ isOpen, toggle }) => {
     const userName = localStorage.getItem('userName') || 'Usuario';
     
     // Obtenemos la inicial para el avatar
-    const initial = userName.charAt(0).toUpperCase();
+    const initial = (userName && userName.length > 0) ? userName.charAt(0).toUpperCase() : 'U';
 
     // 2. LÓGICA DE CERRAR SESIÓN
     const handleLogout = async () => {

@@ -2,15 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import inventarioApi from '../../../api/inventarioApi'; 
+
 import productoApi from '../../../api/productoApi'; // <-- 1. Importamos la API actualizada
 import trackingApi from '../../../api/trackingApi'; 
 import sucursalApi from '../../../api/sucursalApi';
 import { useAuth } from '../../../context/AuthContext';
+import { useNotification } from '../../../context/NotificationContext';
 // --- Modales ---
 import InventarioInfoModal from './InventarioInfoModal'; 
 import ProductoInfoModal from './ProductoInfoModal';
 import ProductoFormModal from './ProductoFormModal';
 import TrackingInfoModal from './TrackingInfoModal';
+
+
 
 // (TABS, Constantes y Helpers sin cambios)
 const TABS = { INVENTARIO: 'inventario', MAESTRO: 'maestro', TRACKING: 'tracking' };
@@ -50,6 +54,7 @@ const formatDate = (dateString) => {
 
 
 const CatalogoStockList = () => {
+    const { addNotification, notifications } = useNotification();
     const [activeTab, setActiveTab] = useState(TABS.INVENTARIO);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -84,6 +89,22 @@ const CatalogoStockList = () => {
                 sucursalApi.getAllSucursales()
             ]);
             setInventario(inventarioData);
+            inventarioData.forEach(item => {
+                if (item.stockActual < item.stockMinimo) {
+                    const mensajeAlerta = `STOCK BAJO CRÍTICO: ${item.producto.nombre} en ${item.sucursal.nombre} (Hay ${item.stockActual}, Mín ${item.stockMinimo})`;
+                    
+                    // Verificamos si ya existe esta alerta recientemente para no spammear
+                    // (Opcional: puedes quitar el if si quieres que avise siempre al recargar)
+                    const yaExiste = notifications.some(n => n.mensaje === mensajeAlerta && n.tipo === 'ALERT');
+                    
+                    if (!yaExiste) {
+                        // Agregamos la alerta
+                        addNotification(mensajeAlerta, 'ALERT');
+                    }
+                }
+            });
+
+
             setProductos(productosData);
             setTrackingData(trackingData); 
             setSucursales(sucursalesData);

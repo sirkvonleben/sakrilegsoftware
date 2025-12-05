@@ -91,7 +91,7 @@ const Layout = () => {
                             </span>
                         </div>
                         <div className="h-10 w-10 rounded-full bg-[#c6f6d5] border-2 border-[#38a169] flex items-center justify-center text-[#2f855a] font-bold text-lg">
-                            {userName.charAt(0).toUpperCase()}
+                            {(userName && userName.length > 0) ? userName.charAt(0).toUpperCase() : 'U'}
                         </div>
                     </button>
 

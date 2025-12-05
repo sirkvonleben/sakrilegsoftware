@@ -6,6 +6,7 @@ import salidaApi from '../../../api/salidaApi';
 // --- ¡APIs REALES IMPORTADAS! ---
 import productoApi from '../../../api/productoApi';
 import sucursalApi from '../../../api/sucursalApi';
+import { useNotification } from '../../../context/NotificationContext';
 
 // --- (Estilos sin cambios) ---
 const inputStyles = "form-select w-full bg-green-50 border border-green-300 text-gray-900 rounded-lg p-3 shadow-sm focus:border-green-600 focus:ring-1 focus:ring-green-400 outline-none transition-colors duration-200";
@@ -15,6 +16,7 @@ const btnRemoveStyles = "bg-red-100 hover:bg-red-200 text-red-800 font-bold py-2
 
 
 const SalidaForm = ({ mode }) => {
+    const { addNotification } = useNotification();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -77,7 +79,6 @@ const SalidaForm = ({ mode }) => {
     };
 
     const handleSubmit = async (e) => {
-        // ... (Tu lógica de handleSubmit no necesita cambios)
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -105,11 +106,14 @@ const SalidaForm = ({ mode }) => {
 
         try {
             await salidaApi.registrarSalida(notaSalidaData);
+            addNotification(`Ingreso registrado: ${detalles.length} productos en ${sucursales.find(s=>s.id == sucursalId)?.nombre}`, 'SUCCESS');
             alert('¡Nota de Salida creada con éxito! El stock ha sido actualizado.');
             navigate('/movimientos'); 
+            addNotification(`Salida registrada: ${motivo}`, 'SUCCESS');
         } catch (err) {
             console.error(err);
             setError("Error al guardar: " + (err.response?.data?.message || "Fallo de conexión o Stock insuficiente (RF-08)."));
+            addNotification(`Error en ingreso: ${err.message}`, 'ALERT');
         } finally {
             setLoading(false);
         }

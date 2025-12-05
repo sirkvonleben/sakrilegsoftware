@@ -6,7 +6,7 @@ import ingresoApi from '../../../api/ingresoApi';
 // --- ¡APIs REALES IMPORTADAS! ---
 import productoApi from '../../../api/productoApi';
 import sucursalApi from '../../../api/sucursalApi';
-
+import { useNotification } from '../../../context/NotificationContext';
 // --- (Estilos sin cambios) ---
 const inputStyles = "form-select w-full bg-green-50 border border-green-300 text-gray-900 rounded-lg p-3 shadow-sm focus:border-green-600 focus:ring-1 focus:ring-green-400 outline-none transition-colors duration-200";
 const textInputStyles = "form-input w-full bg-green-50 border border-green-300 text-gray-900 rounded-lg p-3 shadow-sm focus:border-green-600 focus:ring-1 focus:ring-green-400 outline-none transition-colors duration-200";
@@ -15,6 +15,8 @@ const btnRemoveStyles = "bg-red-100 hover:bg-red-200 text-red-800 font-bold py-2
 
 
 const IngresoForm = ({ mode }) => {
+
+    const { addNotification } = useNotification();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -107,11 +109,13 @@ const IngresoForm = ({ mode }) => {
 
         try {
             await ingresoApi.registrarIngreso(notaIngresoData);
+            addNotification(`Ingreso registrado: ${detalles.length} productos en ${sucursales.find(s=>s.id == sucursalId)?.nombre}`, 'SUCCESS');
             alert('¡Nota de Ingreso creada con éxito! El stock ha sido actualizado.');
             navigate('/movimientos'); 
         } catch (err) {
             console.error(err);
             setError("Error al guardar: " + (err.response?.data?.message || "Fallo de conexión con el Backend."));
+            addNotification(`Error en ingreso: ${err.message}`, 'ALERT');
         } finally {
             setLoading(false);
         }
