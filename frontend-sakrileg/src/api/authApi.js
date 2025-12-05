@@ -1,49 +1,38 @@
-// frontend/src/api/authApi.js
+import apiClient from './axiosConfig'; 
 
-import apiClient from './axiosConfig';
-const API_URL = '/auth';
+const API_URL = '/auth'; // Recuerda: sin '/api/v1' porque ya está en axiosConfig
 
-/**
- * Llama al endpoint /login del backend y guarda el token.
- */
 const login = async (login, password) => {
     try {
-        // Enviamos 'login' y 'password' como espera tu AuthController
         const response = await apiClient.post(`${API_URL}/login`, {
             login: login,
             password: password
         });
 
-        // Si el login es exitoso, guardamos el token en LocalStorage
-        if (response.data.token) {
+        // Verificamos que la respuesta tenga datos
+        if (response.data && response.data.token) {
+            // Guardamos Token
             localStorage.setItem('token', response.data.token);
+            
+            // Guardamos Datos del Usuario (con valores por defecto por seguridad)
+            localStorage.setItem('userName', response.data.username || login); 
+            localStorage.setItem('userRole', response.data.rol || 'INVITADO');      
         }
 
         return response.data; 
     } catch (error) {
         console.error("Error en el login:", error);
-        if (error.response && error.response.status === 401) {
-            throw new Error("Credenciales inválidas. Inténtalo de nuevo.");
-        }
-        throw new Error("No se pudo conectar al servidor de login.");
+        throw error; // Deja que LoginPage maneje la alerta visual
     }
 };
 
-/**
- * Cierra la sesión (elimina el token del cliente).
- */
 const logout = async () => {
-    try {
-        // Eliminamos el token del almacenamiento local
-        localStorage.removeItem('token');
-        return { message: "Logout exitoso" };
-    } catch (error) {
-        console.error("Error en el logout:", error);
-        throw new Error("Error al cerrar sesión.");
-    }
+    // Limpiamos todo al salir
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
+    // Opcional: Llamar al backend si tuvieras endpoint de logout
+    return { message: "Logout exitoso" };
 };
 
-export default {
-    login,
-    logout
-};
+export default { login, logout };

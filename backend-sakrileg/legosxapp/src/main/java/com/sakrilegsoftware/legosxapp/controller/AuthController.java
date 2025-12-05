@@ -21,30 +21,39 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService; // Esto carga tu UserServiceImpl
 
     @Autowired
     private JwtUtil jwtUtil;
 
+    // Necesitamos acceder al repositorio para sacar el rol real
+    @Autowired
+    private com.sakrilegsoftware.legosxapp.repository.UserRepository userRepository;
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
-            // Autenticar
+            // 1. Autenticar
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getLogin(),
                             loginRequest.getPassword()));
 
-            // Generar Token
+            // 2. Cargar detalles
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getLogin());
-            final String jwt = jwtUtil.generateToken(userDetails);
+            final String jwtToken = jwtUtil.generateToken(userDetails);
 
-            // Devolver Token
-            return ResponseEntity.ok(new AuthResponse(jwt, "Login exitoso"));
+            // 3. Obtener el usuario completo de la BD para sacar el Rol y Nombre
+            var usuarioReal = userRepository.findByLogin(loginRequest.getLogin()).orElseThrow();
+            String nombreCompleto = usuarioReal.getNombre() + " " + usuarioReal.getApellido();
+            String rolNombre = usuarioReal.getRol().getNombre();
+
+            // 4. Retornar todo en la respuesta
+            return ResponseEntity.ok(new AuthResponse(jwtToken, "Login exitoso", nombreCompleto, rolNombre));
 
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthResponse(null, "Credenciales inválidas"));
+                    .body(new AuthResponse(null, "Credenciales inválidas", null, null));
         }
     }
 }
